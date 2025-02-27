@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Pass Page</title>
+</head>
+<body>
+<h2>JWT 인증 성공!</h2>
+<p>안녕하세요, <span th:text="${username}"></span> 님!</p>
+<form action="/auth/logout" method="post">
+    <button type="submit">로그아웃</button>
+</form>
+</body>
+</html>
