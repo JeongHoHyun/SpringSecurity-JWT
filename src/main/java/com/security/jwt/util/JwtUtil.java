@@ -25,9 +25,6 @@ public class JwtUtil {
     @Value("${jwt.refresh-expiration}")
     private Long refreshExpirationTime;
 
-    @Value("${jwt.issuer}")
-    private String issuer;
-
     private final RefreshTokenMapper refreshTokenMapper;
 
     private Key getKey() {
