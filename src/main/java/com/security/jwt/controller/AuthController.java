@@ -1,8 +1,10 @@
 package com.security.jwt.controller;
 
+import com.security.jwt.mapper.RefreshTokenMapper;
 import com.security.jwt.service.UserService;
 import com.security.jwt.util.JwtUtil;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -18,6 +20,7 @@ public class AuthController {
     private final JwtUtil jwtUtil;
 
     private final UserService userService;
+    private final RefreshTokenMapper refreshTokenMapper;
 
     @PostMapping("/login")
     public String login(@RequestParam("username") String username, @RequestParam("password") String password
@@ -46,7 +49,21 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public String logout(HttpServletResponse response) {
+    public String logout(HttpServletResponse response, HttpServletRequest request) {
+        String refreshToken = null;
+
+        Cookie[] cookies = request.getCookies();
+        if(cookies != null) {
+            for (Cookie cookie : cookies) {
+                if(cookie.getName().equals("refreshToken")) {
+                    refreshToken = cookie.getValue();
+                }
+            }
+        }
+
+        if (refreshToken != null) {
+            refreshTokenMapper.deleteToken(refreshToken);
+        }
         // Access Token 쿠키 삭제
         Cookie accessCookie = new Cookie("accessToken", null);
         accessCookie.setPath("/");

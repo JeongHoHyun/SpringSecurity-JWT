@@ -1,6 +1,7 @@
 package com.security.jwt.service.impl;
 
 import com.security.jwt.domain.User;
+import com.security.jwt.mapper.RefreshTokenMapper;
 import com.security.jwt.mapper.UserMapper;
 import com.security.jwt.service.UserService;
 import com.security.jwt.util.JwtUtil;
@@ -17,11 +18,14 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
+    private final RefreshTokenMapper refreshTokenMapper;
 
     @Override
     public String authenticate(String username, String password) {
         User user = userMapper.findByUsername(username);
         log.info("LOGIN USER INFO : {}", user);
+        // 기존 토큰 삭제
+        refreshTokenMapper.deleteAllTokensByUser(username);
         if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
             throw new RuntimeException("아이디 또는 비밀번호가 잘못되었습니다.");
         }
