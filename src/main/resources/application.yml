@@ -4,6 +4,12 @@ spring:
     username: root
     password: happyjeong97
 
+logging:
+  level:
+    com.security.jwt: debug
+    org.mybatis: debug
+    org.apache.ibatis: debug
+
 jwt:
   key: "your-very-secret-key-your-very-secret-key"  # 32바이트 이상 문자열
   access-expiration: 1800000  # 만료 시간 (1시간 = 3600000ms)
